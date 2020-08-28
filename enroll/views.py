@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponseRedirect
 from .forms import StudentRegister
 from django.contrib import messages
 from .models import User
 
-# Create your views here.
+# This function will add and show User 
 def add_show(request):
     if request.method == 'POST':
         form = StudentRegister(request.POST)
@@ -17,5 +17,16 @@ def add_show(request):
             form = StudentRegister()
     else:
         form = StudentRegister()
-        students = User.objects.all()
+    students = User.objects.all()
     return render(request, 'enroll/add.html', {'form': form, 'students': students})
+
+# This function will delete 
+def delete_student(request, id):
+    if request.method == 'POST':
+        user = User.objects.get(pk=id)
+        user.delete()
+        messages.success(request, 'Delete Successfull !!')
+        # return HttpResponseRedirect('/')
+    else:
+        messages.error(request, 'Error Not delete User !')
+    return HttpResponseRedirect('/')
