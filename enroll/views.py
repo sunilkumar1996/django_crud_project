@@ -20,6 +20,21 @@ def add_show(request):
     students = User.objects.all()
     return render(request, 'enroll/add.html', {'form': form, 'students': students})
 
+
+# This fuction will update and edit 
+def update_student(request, id):
+    if request.method == 'POST':
+        student = User.objects.get(pk=id)
+        form = StudentRegister(request.POST, instance=student)
+        if form.is_valid():
+            messages.success(request, 'Student Updated Successfull !')
+            form.save()
+    else:
+        student = User.objects.get(pk=id)
+        form = StudentRegister(instance=student)
+    return render(request, 'enroll/update.html', {'form': form})
+
+
 # This function will delete 
 def delete_student(request, id):
     if request.method == 'POST':
